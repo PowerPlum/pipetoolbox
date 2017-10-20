@@ -86,6 +86,9 @@ class Pipe(object):
     
     def radius_external(self):
         return 0.5 * (self._diameter_outer + 2.0 * self._coatings_thickness)
+
+    def wall_thickness(self):
+        return self._wall_thickness
         
     # -----------------    
     def diameter_inner(self):
@@ -98,11 +101,11 @@ class Pipe(object):
         return self._diameter_outer + 2.0 * self._coatings_thickness
     
     # -----------------    
-    def area_internal(self):
+    def area_inner(self):
         return 0.25 * np.pi * self.diameter_inner()**2.0
     
     def area_steel(self):
-        return self.area_outer() - self.area_internal()
+        return self.area_outer() - self.area_inner()
     
     def area_outer(self):
         return 0.25 * np.pi * self.diameter_outer()**2.0
@@ -122,7 +125,7 @@ class Pipe(object):
 
     # -----------------  
     def mass_fluids(self):
-        return self.area_internal() * self._internal_fluid_density
+        return self.area_inner() * self._internal_fluid_density
     
     def mass_steel(self):
         """Calculate the mass per unit length of the pipe"""
@@ -161,17 +164,29 @@ class Pipe(object):
 
         print("Material {}".format(self._materials.name()))
         #
-        # Geometry
+        # Geometry Table
         print(" ")
+        print("OD {:6.4g} mm, DI {:6.4g} mm, t {:6.4g} mm".format(
+                1e3 * self.diameter_outer(),
+                1e3 * self.diameter_inner(),
+                1e3 * self.wall_thickness()
+                ))
+        print("Ai {:6.4g} m^2, As {:6.4g} m^2, Ae {:6.4g} m^2".format(
+                self.area_inner(),
+                self.area_steel(),
+                self.area_outer()
+                ))
+        print("I {:6.4g} m^4".format(self.second_moment()))
         #
         #
+        print(" ")
         if SI:
             print("Tension limit {:6g} N".format(self.tension_limit()))
-            print("Bending limit {:6g} N".format(self.bending_limit()))
+            print("Bending limit {:6g} Nm".format(self.bending_limit()))
             print("Burst limit {:6g} Pa".format(self.pressure_internal_limit()))
         else:
             print("Tension limit {:6g} kN".format(1e-3 * self.tension_limit()))
-            print("Bending limit {:6g} kN".format(1e-3 * self.bending_limit()))
+            print("Bending limit {:6g} kNm".format(1e-3 * self.bending_limit()))
             print("Burst limit {:6g} MPa".format(1e-6 * self.pressure_internal_limit()))
         
         

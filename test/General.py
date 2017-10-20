@@ -17,4 +17,6 @@ pipe_test.material('stainless steel')
 pipe_test.display()
 
 
-
+pipe2 = ptb.Pipe(0.0598, 0.0036)
+pipe2.material('stainless steel')
+pipe2.display()
