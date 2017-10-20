@@ -1,5 +1,9 @@
 README.rst
 setup.cfg
+<<<<<<< HEAD
+=======
+setup.py
+>>>>>>> af9168454f61dfe412a89586a4a4b442c062f33f
 pipetoolbox/__init__.py
 pipetoolbox/materials.py
 pipetoolbox/pipe.py
